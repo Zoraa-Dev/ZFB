@@ -62,7 +62,7 @@ class Zoraa_Dev:
 
     def ThreadPoolExecutor(self):
         try:
-            Console().print('\n• Save Ok: {}\n• Save Cp: {}\n'.format(self.ok,self.cp))
+            Console().print('\n\n• Save Ok: {}\n• Save Cp: {}\n'.format(self.ok,self.cp))
             with ThreadPoolExecutor(max_workers=30) as V:
                 for UserID_And_Username in dump:
                     self.userid, self.username = UserID_And_Username.split('|')
